@@ -1,9 +1,9 @@
 # main.py
 from fastapi import FastAPI, Depends
-from platform_masters.auth.router import router as auth_router  # <-- WAŻNE
-from platform_masters.database import create_db_and_tables
-from platform_masters.auth.utils import get_current_active_user
-from platform_masters.models import User
+from auth.router import router as auth_router  # <-- WAŻNE
+from database import create_db_and_tables
+from auth.utils import get_current_active_user
+from models import User
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
