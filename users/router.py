@@ -1,8 +1,8 @@
 # app/users/router.py (Przykład)
 
 from fastapi import APIRouter, Depends
-from models import User
-from auth.service import get_current_active_user # Importujemy funkcję
+from platform_masters.models import User
+from platform_masters.auth.service import get_current_active_user # Importujemy funkcję
 
 user_router = APIRouter(prefix="/users", tags=["Users"])
 

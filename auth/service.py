@@ -6,9 +6,9 @@ from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 
-from ..database import get_db_session
-from ..models import User
-from .utils import SECRET_KEY, ALGORITHM # Import klucza i algorytmu
+from platform_masters.database import get_db_session
+from platform_masters.models import User
+from platform_masters.utils import SECRET_KEY, ALGORITHM # Import klucza i algorytmu
 
 # 1. Konfiguracja schematu zabezpieczeń OAuth2
 # Używamy `/auth/login` jako endpointu, do którego klient musi się udać po token.
