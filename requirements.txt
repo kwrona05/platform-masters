@@ -10,4 +10,5 @@ python-jose
 alembic
 pytest
 asyncpg
-
+pyasn1
+pyasn1-modules
