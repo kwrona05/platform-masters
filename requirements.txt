@@ -12,3 +12,4 @@ psycopg2-binary
 aiosmtplib
 jinja2
 colorlog
+email_validator
