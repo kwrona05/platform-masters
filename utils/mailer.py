@@ -89,3 +89,37 @@ def send_reset_email_code_sync(recipient_email: str, reset_code: str) -> None:
             loop.run_until_complete(send_reset_email_code(recipient_email, reset_code))
         finally:
             loop.close()
+
+
+async def send_verification_email_code(recipient_email: str, verification_code: str) -> None:
+    await send_email(
+        subject="Skill2Win | Potwierdź rejestrację",
+        recipient=recipient_email,
+        text_body=f"""
+Hej!
+
+Witaj w Skill2Win. Twój kod potwierdzający rejestrację to:
+
+    {verification_code}
+
+Kod wygasa za 15 minut. Wpisz go w aplikacji, aby aktywować konto.
+
+Jeśli to nie Ty inicjowałeś rejestrację, zignoruj tę wiadomość.
+
+Do zobaczenia w grze,
+Zespół Skill2Win
+""",
+        html_template="verification_code.html",
+        context={"verification_code": verification_code},
+    )
+
+
+def send_verification_email_code_sync(recipient_email: str, verification_code: str) -> None:
+    try:
+        asyncio.run(send_verification_email_code(recipient_email, verification_code))
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        try:
+            loop.run_until_complete(send_verification_email_code(recipient_email, verification_code))
+        finally:
+            loop.close()

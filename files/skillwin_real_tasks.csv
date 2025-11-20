@@ -1,0 +1,93 @@
+Issue Type,Summary,Description,Epic Link,Epic Name,Labels
+Epic,Platformer Game MVP,Epic: Platformer Game MVP — zgodnie z Koncept 2.0.,,Platformer Game MVP,"unity,client"
+Epic,Level Editor,Epic: Level Editor — zgodnie z Koncept 2.0.,,Level Editor,"unity,admin"
+Epic,Client Core,Epic: Client Core — zgodnie z Koncept 2.0.,,Client Core,"mobile,client"
+Epic,Daily Tournament Engine,Epic: Daily Tournament Engine — zgodnie z Koncept 2.0.,,Daily Tournament Engine,"backend,client"
+Epic,Payments Integration,Epic: Payments Integration — zgodnie z Koncept 2.0.,,Payments Integration,"backend,mobile"
+Epic,Compliance & Age Verification,Epic: Compliance & Age Verification — zgodnie z Koncept 2.0.,,Compliance Age Verification,"backend,legal"
+Epic,Replay Engine 2.0,Epic: Replay Engine 2.0 — zgodnie z Koncept 2.0.,,Replay Engine 2.0,"backend,client"
+Epic,Premium Weekly Events,Epic: Premium Weekly Events — zgodnie z Koncept 2.0.,,Premium Weekly Events,"backend,client"
+Story,Implement core movement system,"Zaimplementować pełny kontroler ruchu: horizontal input, gravity, jump, double jump, dash.
+
+Definition of Done:
+- Ruch gracza działa płynnie i deterministycznie
+- Brak jitter i przenikania kolizji
+- Mobile buttons + keyboard działają równolegle
+- QA przygotowuje nagranie testowe",Platformer Game MVP,,"unity,client"
+Task,Implement PlayerMovement.cs,"- Utworzyć i zaimplementować PlayerMovement.cs
+- Input: left/right, dash (E), jump (space)
+- Mechaniki: coyote time, jump buffer
+- Integracja eventów z UI (buttony mobile)
+
+DoD:
+- Kontroler przechodzi testy QA
+- Kod przeglądnięty przez Unity lead",Platformer Game MVP,,unity
+Task,Set up GroundCheck & Layers,"- Skonfigurować GroundCheck (raycast down)
+- Zdefiniować Layer: Ground
+- TileMap przypisać do Ground
+
+DoD:
+- Gracz poprawnie wykrywa podłoże w 100% przypadków",Platformer Game MVP,,unity
+Story,Create TileMap-based level editor,"Wizualny edytor poziomów: rysowanie tilemap, obiekty, spawn points, JSON export.
+
+DoD:
+- Editor pozwala tworzyć poziom od zera
+- Poziom można zapisać i załadować
+- Zgodność assetów z wersją gry",Level Editor,,"unity,admin"
+Task,Implement TileMap painting tools,"- Narzędzia malowania: pencil, erase, fill
+- Zapis warstw tilemapy
+
+DoD: narzędzia działają bez crashy, QA przetestowało 5 przykładowych map",Level Editor,,"unity,admin"
+Task,Add JSON export & import,"- Serializacja poziomu: tilemap, spawn points, hazards
+- JSON zgodny z backendem
+
+DoD: Poziom ładuje się poprawnie w grze mobile",Level Editor,,"unity,admin"
+Story,Implement tournament list and join flow,"Wyświetlanie turniejów 1–10 zł, logika zapisów, przekierowanie do gry.
+
+DoD:
+- Lista turniejów pobiera się z API
+- Dołączenie działa w 100% przypadków
+- UX zgodny z designem",Client Core,,"mobile,client"
+Task,Create tournament list UI,"- UI listy turniejów + stany loading/error
+DoD: UI działa poprawnie na 5 rozdzielczościach",Client Core,,mobile
+Task,Implement join tournament API,"- Połączenie z backend: POST /join
+DoD: Obsługa błędów, edge cases, brak crashy",Client Core,,mobile
+Story,Implement daily tournament scheduler,"System turniejów codziennych o 18:00, min/max 16/32 graczy.
+
+DoD:
+- Turniej startuje automatycznie 3 dni z rzędu
+- Logi bez błędów
+- Ranking zapisany na backendzie",Daily Tournament Engine,,backend
+Task,Create CRON job for 18:00 start,"- Cloud Scheduler lub cron service
+DoD: 3 symulowane dni startu turnieju bez błędu",Daily Tournament Engine,,backend
+Task,Implement dynamic reward scaling,"- Nagrody skalowane wg zasad z Koncept 2.0
+DoD: backend oblicza poprawnie dla 16–32 graczy",Daily Tournament Engine,,backend
+Story,Integrate Apple/Google/imoje payments,"Obsługa zakupów wpisowego, walidacja, rozliczenia.
+
+DoD:
+- Płatności przechodzą na iOS/Android/Web
+- Walidacja tokenów działa
+- Brak duplikacji transakcji",Payments Integration,,"backend,mobile"
+Task,Integrate Google Play Billing,"- Implementacja BillingClient
+- Walidacja purchase token
+DoD: 5 testowych transakcji przechodzi poprawnie",Payments Integration,,mobile
+Task,Integrate imoje,"- Web checkout + callback backend
+DoD: poprawny redirect, obsługa success/fail",Payments Integration,,backend
+Story,Implement deterministic replay recording,"Zapis inputów co 0.1s zgodnie z Koncept 2.0.
+
+DoD:
+- Replay daje 1:1 odtworzenie gry
+- Odtwarzanie działa bez desync",Replay Engine 2.0,,"backend,client"
+Task,Build input recorder module,"- Logika zbierania inputów co 100ms
+- Bufor i kompresja
+DoD: 60s zapisu <200KB",Replay Engine 2.0,,client
+Task,Implement replay playback,"- Odtwarzanie deterministyczne
+DoD: 3 testowe replaye odtwarzają się identycznie",Replay Engine 2.0,,client
+Story,Implement 1v1 bracket system,"Drabinki turniejowe premium.
+
+DoD:
+- System losuje pary
+- Możliwy walkover
+- Backend obsługuje pełny przebieg eventu",Premium Weekly Events,,backend
+Task,Bracket generator,"- Algorytm generowania drabinek 1v1
+DoD: Testy z 8–32 graczami",Premium Weekly Events,,backend

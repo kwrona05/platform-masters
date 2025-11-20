@@ -1,1 +1,1 @@
-from .models import AdminResetCode, User
+from .models import AdminResetCode, User, UserVerificationCode
