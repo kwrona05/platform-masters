@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configuration>
+    <context>
+        <name>skill2win</name>
+        <includeRegexes>
+            <regex>.*</regex>
+        </includeRegexes>
+        <excludeRegexes>
+        </excludeRegexes>
+    </context>
+</configuration>

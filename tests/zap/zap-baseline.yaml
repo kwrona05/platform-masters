@@ -1,0 +1,27 @@
+env:
+  - name: target
+    value: ${ZAP_TARGET}
+parameters:
+  failOnError: false
+  progressToStdout: true
+  maxDuration: 300
+  warnOnFail: true
+  contextFile: context.context
+  contextUrls:
+    - ${ZAP_TARGET}
+jobs:
+  - type: spider
+    parameters:
+      context: ""
+      url: ${ZAP_TARGET}
+      maxDuration: 2
+  - type: passiveScan-wait
+reports:
+  - template: traditional-json
+    target: /zap/wrk/reports/zap-baseline.json
+    reportDir: /zap/wrk/reports
+    reportTitle: ZAP Baseline
+  - template: traditional-html
+    target: /zap/wrk/reports/zap-baseline.html
+    reportDir: /zap/wrk/reports
+    reportTitle: ZAP Baseline

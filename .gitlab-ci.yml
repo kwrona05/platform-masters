@@ -1,0 +1,50 @@
+stages:
+  - test
+  - security
+
+variables:
+  PYTHONDONTWRITEBYTECODE: "1"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_NO_INPUT: "1"
+
+cache:
+  paths:
+    - .cache/pip
+
+.setup_python:
+  image: python:3.12-slim
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+tests:
+  stage: test
+  extends: .setup_python
+  script:
+    - pytest -q
+  artifacts:
+    when: always
+    paths:
+      - .pytest_cache
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+zap_baseline:
+  stage: security
+  image: owasp/zap2docker-stable
+  variables:
+    ZAP_TARGET: "${ZAP_TARGET:-http://localhost:8000}"
+  script:
+    - zap-baseline.py -t "$ZAP_TARGET" -m 5 -J zap-baseline.json -r zap-baseline.html || true
+  artifacts:
+    when: always
+    paths:
+      - zap-baseline.json
+      - zap-baseline.html
+    expire_in: 1 week
+  allow_failure: true
+  rules:
+    - if: '$ZAP_TARGET'

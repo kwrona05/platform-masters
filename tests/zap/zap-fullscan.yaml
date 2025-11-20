@@ -1,0 +1,31 @@
+env:
+  - name: target
+    value: ${ZAP_TARGET}
+parameters:
+  failOnError: false
+  progressToStdout: true
+  maxDuration: 600
+  warnOnFail: true
+  contextFile: context.context
+  contextUrls:
+    - ${ZAP_TARGET}
+jobs:
+  - type: spider
+    parameters:
+      url: ${ZAP_TARGET}
+      maxDuration: 5
+  - type: activeScan
+    parameters:
+      url: ${ZAP_TARGET}
+      recurse: true
+      inScopeOnly: false
+      maxDuration: 5
+reports:
+  - template: traditional-json
+    target: /zap/wrk/reports/zap-fullscan.json
+    reportDir: /zap/wrk/reports
+    reportTitle: ZAP Full Scan
+  - template: traditional-html
+    target: /zap/wrk/reports/zap-fullscan.html
+    reportDir: /zap/wrk/reports
+    reportTitle: ZAP Full Scan
