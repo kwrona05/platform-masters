@@ -15,6 +15,8 @@ Lightweight FastAPI backend z logowaniem użytkowników/adminów (JWT), resetem 
 2. Ustaw zmienne środowiskowe (przykład `.env.dev`):
    ```
    DATABASE_URL=sqlite:///./dev.db          # lokalnie; na produkcji postgres://...
+   DB_MAINTENANCE=update                    # update|reset|skip – reset przy problemach na Render
+   # RESET_DB=1                             # legacy/awaryjne wymuszenie resetu (równoważne DB_MAINTENANCE=reset)
    SECRET_KEY=change-me
    ACCESS_TOKEN_EXPIRE_MINUTES=30
    CORS_ORIGINS=http://localhost:5173,https://twoj-front.app
@@ -29,6 +31,8 @@ Lightweight FastAPI backend z logowaniem użytkowników/adminów (JWT), resetem 
    uvicorn main:app --reload
    ```
    Przy starcie `ensure_database()` wykona migracje Alembic do head.
+   - `DB_MAINTENANCE=reset` – wyczyści i postawi schemat od zera (przy problemach/na Render).
+   - `DB_MAINTENANCE=skip` – pominie migracje, jeśli bazę utrzymuje zewnętrzny proces.
 
 ## Struktura
 - `main.py` – start aplikacji, CORS middleware, rejestracja routerów.
