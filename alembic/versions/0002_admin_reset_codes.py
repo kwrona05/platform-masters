@@ -24,7 +24,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("code", sa.String(length=12), nullable=False),
         sa.Column("expires_at", sa.DateTime(), nullable=False),
-        sa.Column("used", sa.Boolean(), nullable=False, server_default=sa.text("0")),
+        sa.Column("used", sa.Boolean(), nullable=False, server_default=sa.text("FALSE")),
         sa.Column("created_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
     )
