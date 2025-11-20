@@ -4,8 +4,8 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from platform_masters.database import get_db_session
-from platform_masters.models import User
+from database import get_db_session
+from models import User
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-super-secret-key")  # najlepiej ustawić w .env
