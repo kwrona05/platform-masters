@@ -66,3 +66,7 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL", SMTP_USER or "no-reply@example.com")
 
 # CORS
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "*").split(",") if o.strip()]
+
+# Rate limiting
+RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
+RATE_LIMIT_WINDOW_SECONDS = int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60"))

@@ -35,3 +35,7 @@ class AdminRead(AdminBase):
     is_admin: bool
     auth_provider: str
     model_config = ConfigDict(from_attributes=True)
+
+
+class ModerationPayload(BaseModel):
+    user_id: int = Field(gt=0)

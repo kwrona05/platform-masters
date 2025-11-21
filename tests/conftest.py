@@ -22,6 +22,8 @@ os.environ.setdefault("DATABASE_URL", f"sqlite:///{TEST_DB_PATH}")
 os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("RESET_DB", "1")
 os.environ.setdefault("LOG_LEVEL", "WARNING")
+os.environ.setdefault("RATE_LIMIT_REQUESTS", "100")
+os.environ.setdefault("RATE_LIMIT_WINDOW_SECONDS", "60")
 
 # Wyłącz ostrzeżenia datetime z bibliotek zewnętrznych używanych przez jose
 warnings.filterwarnings("ignore", category=DeprecationWarning, module="jose.jwt")
@@ -32,6 +34,7 @@ import database  # noqa: E402
 import main  # noqa: E402
 from database import Base, SessionLocal, engine  # noqa: E402
 from utils.db_maintenance import ensure_database  # noqa: E402
+from utils.rate_limiter import rate_limiter  # noqa: E402
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -72,9 +75,18 @@ def client(db_session):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    # Ensure isolation between tests for rate limits
+    rate_limiter.reset(max_requests=int(os.environ.get("RATE_LIMIT_REQUESTS", "100")), window_seconds=int(os.environ.get("RATE_LIMIT_WINDOW_SECONDS", "60")))
+
+
 @pytest.fixture
 def no_email(monkeypatch):
     # Stub wysyłki maili, aby testy nie robiły realnych połączeń SMTP
     monkeypatch.setattr("utils.mailer.send_reset_email_code", lambda *a, **k: None)
     monkeypatch.setattr("utils.mailer.send_reset_email_code_sync", lambda *a, **k: None)
     monkeypatch.setattr("services.admin_auth.logic.send_reset_email_code_sync", lambda *a, **k: None)
+    monkeypatch.setattr("utils.mailer.send_verification_email_code", lambda *a, **k: None)
+    monkeypatch.setattr("utils.mailer.send_verification_email_code_sync", lambda *a, **k: None)
+    monkeypatch.setattr("services.user_auth.logic.send_verification_email_code_sync", lambda *a, **k: None)

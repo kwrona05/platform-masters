@@ -5,6 +5,7 @@ from database import get_db_session
 from models import User
 from services.admin_auth import logic, schemas
 from services.admin_auth.dependencies import get_current_admin
+from services.user_auth.schemas import UserRead
 
 router = APIRouter(prefix="/admin/auth", tags=["Admin Auth"])
 
@@ -48,3 +49,30 @@ def confirm_reset_code(payload: schemas.ConfirmCodePayload, db: Session = Depend
 def set_new_password(payload: schemas.NewPasswordPayload, db: Session = Depends(get_db_session)):
     logic.reset_password(db, payload)
     return {"message": "Hasło zostało zaktualizowane."}
+
+
+@router.post("/users/verify", response_model=UserRead)
+def verify_account(
+    payload: schemas.ModerationPayload,
+    db: Session = Depends(get_db_session),
+    admin: User = Depends(get_current_admin),
+):
+    return logic.verify_account(db, payload)
+
+
+@router.post("/users/ban", response_model=UserRead)
+def ban_user(
+    payload: schemas.ModerationPayload,
+    db: Session = Depends(get_db_session),
+    admin: User = Depends(get_current_admin),
+):
+    return logic.ban_user(db, payload, ban=True)
+
+
+@router.post("/users/unban", response_model=UserRead)
+def unban_user(
+    payload: schemas.ModerationPayload,
+    db: Session = Depends(get_db_session),
+    admin: User = Depends(get_current_admin),
+):
+    return logic.ban_user(db, payload, ban=False)

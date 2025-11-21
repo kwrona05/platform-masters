@@ -1,0 +1,192 @@
+{
+  "info": {
+    "_postman_id": "c9c9f7ae-5d0f-4a38-9f84-8738ab3a4f41",
+    "name": "Platform Masters Auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "codex"
+  },
+  "item": [
+    {
+      "name": "User Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"player@skill2win.gg\",\n  \"nickname\": \"player1\",\n  \"password\": \"Pass12345\",\n  \"confirmPassword\": \"Pass12345\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "User Resend Code",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/auth/resend-code",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"player@skill2win.gg\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "User Confirm Email",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/auth/verify-code",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"player@skill2win.gg\", \"code\": \"{{verification_code}}\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "User Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"player@skill2win.gg\", \"password\": \"Pass12345\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "User Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{user_token}}", "type": "text" }
+        ],
+        "url": "{{base_url}}/auth/me"
+      }
+    },
+    {
+      "name": "User Submit KYC",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{user_token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": "{{base_url}}/auth/kyc",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"first_name\": \"Jan\",\n  \"last_name\": \"Kowalski\",\n  \"bank_account\": \"12345678901234567890123456\",\n  \"billing_address\": \"Ul. Testowa 1, 00-000 Warszawa\",\n  \"pesel\": \"90010112345\"\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/admin/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"admin@skill2win.gg\", \"password\": \"AdminPass123!\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/admin/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"admin@skill2win.gg\", \"password\": \"AdminPass123!\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{admin_token}}", "type": "text" }
+        ],
+        "url": "{{base_url}}/admin/auth/me"
+      }
+    },
+    {
+      "name": "Admin Verify User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{admin_token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": "{{base_url}}/admin/auth/users/verify",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"user_id\": 1 }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Ban User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{admin_token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": "{{base_url}}/admin/auth/users/ban",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"user_id\": 1 }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Unban User",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{admin_token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": "{{base_url}}/admin/auth/users/unban",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"user_id\": 1 }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Admin Reset Code (optional)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{base_url}}/admin/auth/reset-code",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"admin@skill2win.gg\" }",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "user_token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "verification_code", "value": "" }
+  ]
+}

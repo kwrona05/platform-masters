@@ -6,15 +6,26 @@ import secrets
 
 from core.security import create_access_token, hash_password
 from models import AdminResetCode, User
-from services.admin_auth.schemas import AdminCreate, ConfirmCodePayload, NewPasswordPayload, ResetCodePayload
+from services.admin_auth.schemas import AdminCreate, ConfirmCodePayload, ModerationPayload, NewPasswordPayload, ResetCodePayload
 from services.user_auth.logic import authenticate_user, get_user_by_email, register_user
 from services.user_auth.schemas import UserCreate
 from utils.mailer import send_reset_email_code_sync
 
 
 def register_admin(db: Session, payload: AdminCreate) -> User:
-    user_payload = UserCreate(email=payload.email, password=payload.password)
-    return register_user(db, user_payload, is_admin=True)
+    user_payload = UserCreate(
+        email=payload.email,
+        nickname=f"admin-{payload.email}",
+        password=payload.password,
+        confirmPassword=payload.password,
+    )
+    return register_user(
+        db,
+        user_payload,
+        is_admin=True,
+        email_confirmed=True,
+        send_verification=False,
+    )
 
 
 def authenticate_admin(db: Session, email: str, password: str) -> User:
@@ -93,3 +104,29 @@ def reset_password(db: Session, payload: NewPasswordPayload) -> None:
     db.add(admin)
     db.add(entry)
     db.commit()
+
+
+def verify_account(db: Session, payload: ModerationPayload) -> User:
+    user = db.get(User, payload.user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Użytkownik nie istnieje.")
+    user.is_verified_account = True
+    user.kyc_verified_at = datetime.now(timezone.utc)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+def ban_user(db: Session, payload: ModerationPayload, *, ban: bool) -> User:
+    user = db.get(User, payload.user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Użytkownik nie istnieje.")
+    user.is_banned = ban
+    # Banned accounts should not stay verified for payouts
+    if ban:
+        user.is_verified_account = False
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
